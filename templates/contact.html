@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <!-- contact section -->
+  <section class="contact_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Get In Touch
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-md-8 col-lg-6 mx-auto">
+            <div class="form_container">
+                <p id="savedMessage" class="" style="display: none;"></p> <!-- Message box -->
+    
+                <form method="post" action="{% url 'saveEnquiry' %}" id="contactForm">
+                    {% csrf_token %}
+                    <div>
+                        <input type="text" name="name" id="name" placeholder="Your Name" required />
+                    </div>
+                    <div>
+                        <input type="email" name="email" id="email" placeholder="Your Email" required />
+                    </div>
+                    <div>
+                        <input type="text" name="phone" id="phone" placeholder="Your Phone" required />
+                    </div>
+                    <div>
+                        <input type="text" name="message" id="message" class="message-box" placeholder="Message" required />
+                    </div>
+                    <div class="btn_box">
+                        <button type="submit">SEND</button>
+                    </div>
+                </form>          
+            </div>
+        </div>
+    </div>
+    
+    </div>
+  </section>
+  <!-- jQuery for AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#contactForm").submit(function (event) {
+            event.preventDefault(); // Prevent form from reloading the page
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'saveEnquiry' %}",
+                data: $(this).serialize(), // Serialize form data
+                success: function (response) {
+                    $("#savedMessage").text(response.message).removeClass().addClass(response.messageClass).fadeIn();
+
+                    // Hide the message after 5 seconds
+                    setTimeout(function () {
+                        $("#savedMessage").fadeOut();
+                    }, 5000);
+
+                    // Clear the form after successful submission
+                    if (response.status === "success") {
+                        $("#contactForm")[0].reset();
+                    }
+                },
+                error: function () {
+                    $("#savedMessage").text("Something went wrong. Please try again.").removeClass().addClass("text-danger").fadeIn();
+                }
+            });
+        });
+    });
+</script>
+  <!-- end contact section -->
+
+  {% endblock  %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <!-- Contact Section -->
+  <section class="contact_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>Simple Calculator</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-8 col-lg-6 mx-auto">
+          <div class="form_container">
+            <form method="POST">
+                {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {% endif %}
+              {% csrf_token %}
+              <div>
+                <input type="number" name="num1" class="form-control" placeholder="Enter First Number" />
+              </div>
+              <div>
+                <select name="opr" class="form-control">
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </select>
+              </div>
+              <br/>
+              <div>
+                <input type="number" name="num2" class="form-control"  placeholder="Enter second Number" />
+              </div>
+              <div>          
+              <div class="btn_box">
+                <button type="submit">Calculate</button>
+              </div>
+              {% if result %}
+                <div class="mt-3">
+                  <label><strong>Output:</strong>{{result}} </label><br>
+                </div>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
